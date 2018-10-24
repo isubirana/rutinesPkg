@@ -2,11 +2,8 @@
 
 # funcio que afegeix els casos de y sota dels de x.
 # per a l'opcio all=1 i all=2 manen les etiquetes i formats de x
-# per a l'opcio all=3 manen les etiquetes de x per a les variables comunes i les de y per a la resta. Els formats resultants s?n 
+# per a l'opcio all=3 manen les etiquetes de x per a les variables comunes i les de y per a la resta. Els formats resultants s?n
 #    coherents amb la fusio (realitza un arregla.formats)
-
-if (!"arregla.formats"%in%ls()) source(file.path(RutinesLocals,"arregla.formats.r"))
-
 
 add.cases<-function(x,y,font=NULL,all=3,show.warnings=TRUE){
 
@@ -46,18 +43,18 @@ add.cases<-function(x,y,font=NULL,all=3,show.warnings=TRUE){
     if (length(falten.y)){
       if (show.warnings) cat("\n\n>Advertencia: les seguents variables quedaran buides per a y\n  ",paste(falten.y,collapse=", "),"\n\n")
       for (i in 1:length(falten.y)) eval(parse(text=paste("y$'",falten.y[i],"'<-NA",sep="")))
-      y<-as.data.frame(y)  
+      y<-as.data.frame(y)
     }
     if (length(falten.x)){
       if (show.warnings) cat("\n\n>Advertencia: les seguents variables quedaran buides per a x\n  ",paste(falten.x,collapse=", "),"\n\n")
-      for (i in 1:length(falten.x)) eval(parse(text=paste("x$'",falten.x[i],"'<-NA",sep="")))  
-      x<-as.data.frame(x)            
+      for (i in 1:length(falten.x)) eval(parse(text=paste("x$'",falten.x[i],"'<-NA",sep="")))
+      x<-as.data.frame(x)
     }
     fusio<-rbind(
       as.data.frame(lapply(x[,names(x)],function(temp) I(as.character(temp)))),
       as.data.frame(lapply(y[,names(x)],function(temp) I(as.character(temp))))
     )
-    fusio<-arregla.formats(fusio,force=TRUE)  
+    fusio<-arregla.formats(fusio,force=TRUE)
     names(fusio)<-names(x)
     if (length(attr.x)){
       for (i in 1:length(attr.x)){
@@ -73,4 +70,4 @@ add.cases<-function(x,y,font=NULL,all=3,show.warnings=TRUE){
   }
 
 }
-  
+
