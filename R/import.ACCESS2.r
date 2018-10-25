@@ -8,6 +8,7 @@
 #' @param var.dicc vector amb els noms de les variables del diccioanri amb l'ordre noom, etiqueta variable, etiqueta valors, taula
 #' @param noms.taules vector amb el nom de les taules com es guardaran a R
 #' @param fix.formats arregla els formats de les variables (default TRUE)
+#' @import RODBC chron
 #' @export
 
 import.ACCESS2<-function(file.mbd,nom.taula,nom.variables=list("ALL"),nom.dicc="",file.spss="",var.dicc="",noms.taules=gsub(" ","_",nom.taula),fix.formats=TRUE){
