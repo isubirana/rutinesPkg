@@ -1,3 +1,7 @@
+#' import.ACCESS
+#' for internal use only. Use import.ACCESS2
+#' @export
+
 
 import.ACCESS<-function(file,nom.taula,nom.variables=list("*"),nom.taula.R=nom.taula){  # per defecte ho fa interactivament
 
