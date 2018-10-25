@@ -1,11 +1,14 @@
 Package: rutinesPkg
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Miscelanious functions.
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
-Encoding: UTF-8
+Date: 2018-10-24
+Depends:
+    R (>= 2.13.1), chron, Hmisc, gdata, foreign, gtools, RODBC, ROCR
+Author: Isaac Subirana
+Maintainer: The package maintainer <isubirana@imim.es>
+Description: This package is a miscelania of rutines by REGICOR group.
+License: GPL (>=2)
+Encoding: latin1
 LazyData: true
+RoxygenNote: 6.1.0

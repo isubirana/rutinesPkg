@@ -1,15 +1,15 @@
-#### FUNCIO QUE AFEGEIX CASOS ####
+#' FUNCIO QUE AFEGEIX CASOS
+#' funcio que afegeix els casos de y sota dels de x.
+#' @param x primera base de dades
+#' @param y segona base de dades que es posara a sota
+#' @param font NULL
+#' @param all 1: posa les variables comunes de x i de y; 2: posa totes les variables de x; 3: posa totes les variables de x i totes les variables de y.
+#' @note per a l'opcio all=1 i all=2 manen les etiquetes i formats de x
+#' per a l'opcio all=3 manen les etiquetes de x per a les variables comunes i les de y per a la resta. Els formats resultants s?n
+#' coherents amb la fusio (realitza un arregla.formats)
 
-# funcio que afegeix els casos de y sota dels de x.
-# per a l'opcio all=1 i all=2 manen les etiquetes i formats de x
-# per a l'opcio all=3 manen les etiquetes de x per a les variables comunes i les de y per a la resta. Els formats resultants s?n
-#    coherents amb la fusio (realitza un arregla.formats)
-
+#' @export
 add.cases<-function(x,y,font=NULL,all=3,show.warnings=TRUE){
-
-  # all=1: posa les variables comunes de x i de y
-  # all=2: posa totes les variables de x
-  # all=3: posa totes les variables de x i totes les variables de y.
 
   comunes<-intersect(names(x),names(y))
 
