@@ -19,6 +19,8 @@ import.ACCESS<-function(file,nom.taula,nom.variables=list("*"),nom.taula.R=nom.t
 
   canal <- odbcConnectAccess(file)
 
+  taules <- list()
+
   for (i in 1:length(nom.taula)){
 
     nom.variables[[i]]<-ifelse(nom.variables[[i]]=="ALL","*",nom.variables[[i]])
@@ -106,16 +108,22 @@ import.ACCESS<-function(file,nom.taula,nom.variables=list("*"),nom.taula.R=nom.t
       attributes(taula)$table.origen=nom.taula[i]
       attributes(taula)$import.origen<-"ACCESS"
 
+      taules[[i]] <- taula
+      # assign(nom.taula.R[i], taula, env=.GlobalEnv)
 
-      assign(nom.taula.R[i], taula, env=.GlobalEnv)
-
-    } else cat("\n\n>Error: No ha pogut llegir la taula '",nom.taula[i],"' Motiu:",paste(taula,collapse=" "))  # no arreglar si no pot fer la consulta
+    } else {
+      cat("\n\n>Error: No ha pogut llegir la taula '",nom.taula[i],"' Motiu:",paste(taula,collapse=" "))  # no arreglar si no pot fer la consulta
+      taules[[i]] <- "Error"
+    }
 
   } ## fi bucle per a totes les taules
 
   odbcClose(canal) # tenco el canal a la base de dades de ACCESS.
 
-  return(nom.taula.R)
+  attr(taules, "nom.taula.R") <- nom.taula.R
+
+  # return(nom.taula.R)
+  return(taules)
 
 }
 

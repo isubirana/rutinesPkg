@@ -13,20 +13,23 @@
 
 import.ACCESS2<-function(file.mbd,nom.taula,nom.variables=list("ALL"),nom.dicc="",file.spss="",var.dicc="",noms.taules=gsub(" ","_",nom.taula),fix.formats=TRUE){
 
+  # nom.taula<-import.ACCESS(file=file.mbd,nom.taula=nom.taula,nom.variables=nom.variables,nom.taula.R=noms.taules)
+  taules<-import.ACCESS(file=file.mbd,nom.taula=nom.taula,nom.variables=nom.variables,nom.taula.R=noms.taules)
 
-
-  nom.taula<-import.ACCESS(file=file.mbd,nom.taula=nom.taula,nom.variables=nom.variables,nom.taula.R=noms.taules)
 
   if (nom.dicc!=""){ # si existeix una taula de diccionari etiqueta la/es taula/es
-    nom.dict<-import.ACCESS(file=file.mbd,nom.taula=nom.dicc)
-    assign("dict",get(nom.dict))
+    # nom.dict<-import.ACCESS(file=file.mbd,nom.taula=nom.dicc)
+    # assign("dict",get(nom.dict))
+    dict<-import.ACCESS(file=file.mbd,nom.taula=nom.dicc)
     names(dict)<-tolower(names(dict))
     dict<-arregla.formats(dict)
   }
 
-  for (i in 1:length(nom.taula)){
+  # for (i in 1:length(nom.taula)){
+  for (i in 1:length(taules)){
 
-    assign("taula",get(nom.taula[i]))
+    # assign("taula",get(nom.taula[i]))
+    taula <- taules[[i]]
     names(taula)<-tolower(names(taula))
     nom.taula.access<-attr(taula,"table.origen")
 
