@@ -94,7 +94,7 @@ intervals.coxph <- function(x, level=.95, fun=exp, lab="hr")
 #' @param d nombre de digits (default 3)
 #' @param exclude.intercept logical. incloure intercept (no si el model és cox)
 #' @export
-print.intervals <- function(n, len = 6, d = 3, exclude.intercept=inherits(n,"intervals.glm"))
+print.intervals <- function(n, len = 6, d = 3, exclude.intercept=inherits(n,"intervals.glm"),...)
 {
   dd <- dim(n)
   n[n > 999.99] <- Inf

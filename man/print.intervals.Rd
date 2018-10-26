@@ -6,7 +6,7 @@
 métode per a printar per consola}
 \usage{
 \method{print}{intervals}(n, len = 6, d = 3,
-  exclude.intercept = inherits(n, "intervals.glm"))
+  exclude.intercept = inherits(n, "intervals.glm"), ...)
 }
 \arguments{
 \item{n}{objecte intervals}

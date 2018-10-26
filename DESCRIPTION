@@ -4,7 +4,7 @@ Title: Miscelanious functions.
 Version: 0.1.0
 Date: 2018-10-24
 Depends:
-    R (>= 2.13.1), chron, Hmisc, gdata, foreign, gtools, RODBC, ROCR
+    R (>= 2.13.1), chron, Hmisc, gdata, foreign, gtools, RODBC, ROCR, car
 Author: Isaac Subirana
 Maintainer: The package maintainer <isubirana@imim.es>
 Description: This package is a miscelania of rutines by REGICOR group.
