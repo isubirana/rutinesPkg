@@ -1,5 +1,5 @@
 #' ROC.plot
-#' DIBUIXA UNA CURVA ROC I DONA L'AUC I EL SEU INTERVAL DE CONFIANÇA
+#' PLOTS THE AUC CURVE AND REPORST A CONFIDENCE INTERVAL
 #' @param y variable binaria 0/1
 #' @param p valors predits
 #' @param alpha nivell de significació (default 0.05)
