@@ -17,19 +17,19 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
 # "chron","Hmisc","gdata"
 
-  options(warn=-1) # no ensenya els warnings per pantalla
+  options(warn=-1)
 
-  taula<-as.data.frame(taula)  # per permetre entrar variables individualment d'un data.frame
+  taula<-as.data.frame(taula)
 
-  taula.original<-taula    # taula original: per no perdre les dades originals
+  taula.original<-taula
 
   formats<-rep(NA,ncol(taula))
   taula.perduts<-taula.blank<-taula.perduts.numeric<-taula.perduts.antic<-taula.string<-list()
 
-  for (j in 1:ncol(taula)){ ## bucle per a totes les variables
+  for (j in 1:ncol(taula)){
 
 
-    if (force || is.null(attr(taula[,j],"formats.arreglats")) || !attr(taula[,j],"formats.arreglats")){   ### NO FA RES SI TAULA JA TÉ ELS FORMATS ARREGLATS ##
+    if (force || is.null(attr(taula[,j],"formats.arreglats")) || !attr(taula[,j],"formats.arreglats")){
 
       cat("\n\n-----Arreglant variable '",names(taula)[j],"'---------\n")
 
@@ -39,7 +39,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
       var<-as.character(taula[,j])
       var<-trim(var)
-      var<-ifelse(var=="",NA,var)  # si ja era caràcter els "" es consideren NA.
+      var<-ifelse(var=="",NA,var)
 
       if (sum(var=="NA",na.rm=TRUE)==nrow(taula)) var<-rep(NA,nrow(taula))
 
@@ -53,45 +53,45 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
         assignat=TRUE
       }
 
-      ### VARIABLE NUMÈRICA ###
+      ### VARIABLE NUMERICA ###
 
       if (!assignat){
         aux<-var
         index.blank<-grep(" ",aux)
         aux<-gsub(" ","",aux)
         aux<-gsub(",",".",aux)
-        aux<-gsub("[\\.]+",".",aux)  # posem 45..32 -> 45.32
-        aux<-ifelse(aux==".",NA,aux)  # considerem que un punt (o abans una coma) sola de fet és un missing
+        aux<-gsub("[\\.]+",".",aux)
+        aux<-ifelse(aux==".",NA,aux)
         na.abans<-is.na(aux)
         na.despres<-is.na(as.double(aux))
-        if (all(is.na(aux))){ # tots són missings
+        if (all(is.na(aux))){
           taula[,j]<-aux
           formats[j]<-"F8.2"
           assignat=TRUE
         }else{
-          if (sum(na.abans)==sum(na.despres)){   # no perd cap valor
+          if (sum(na.abans)==sum(na.despres)){
             var<-as.double(aux)
             enters<-trunc(var)
             decimals<-var-trunc(var)
   			    num.enters<-max(nchar(as.character(enters[!is.na(enters)])))
     			  num.dec<-max(nchar(format(decimals[!is.na(decimals)])))-2
     			  num.dec<-ifelse(num.dec<0,0,num.dec)
-   			    num.dec<-ifelse(num.dec>16,16,num.dec)  #com a màxim pot haver-hi 16 decimals!
+   			    num.dec<-ifelse(num.dec>16,16,num.dec)
     			  formats[j]<-paste("F",num.enters+num.dec+1,".",num.dec,sep="")
             taula[,j]<-var
       		  assignat=TRUE
-      		  if (length(index.blank)>0){ # ho ha pogut convertir a numèric però en alguns hi ha espais en blanc (ex. 2 1.4 --> 21.4)
+      		  if (length(index.blank)>0){
               if (!is.null(identif)){
                 taula.blank[[j]]<-eval(parse(text=paste("data.frame(list(",identif,"=taula[index.blank,identif],ara=taula[index.blank,j],abans=taula.original[index.blank,j]))",sep="")))
               }
               if (is.null(identif)){
                 taula.blank[[j]]<-data.frame(list(row_num=index.blank,ara=taula[index.blank,j],abans=taula.original[index.blank,j]))
               }
-              cat("\nHan aparegut espais en blanc que s'han eliminat en la variable per als individus:\n")
+              cat("\nHan aparegut espais en blanc que s han eliminat en la variable per als individus:\n")
               print(taula.blank[[j]])
               cat("\n\n")
             }
-         } # si perd algun valor no ho toca.
+         }
         }
       }
 
@@ -101,9 +101,9 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
       if (!assignat){
 
         var.class<-class(taula[,j])
-        if (is.null(var.class) || !sum(var.class%in%c("dates","times"))==2){ # el format no està assignat a chron.
+        if (is.null(var.class) || !sum(var.class%in%c("dates","times"))==2){
 
-          na.abans<-is.na(var)  # així ens assegurem de no perdre cap valor
+          na.abans<-is.na(var)
 
           #posem el format en /.
           aux<-var
@@ -119,7 +119,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
           segon<-unlist(lapply(strsplit(aux,"/"),function(x) x[2]))
              # suposant que els mesos estan en literal
           segon<-tolower(segon)
-            # en anglés (com en R ó en SPSS)
+            # en angles (com en R o en SPSS)
           segon[grep("^jan",segon)]<-1
           segon[grep("^feb",segon)]<-2
           segon[grep("^mar",segon)]<-3
@@ -132,7 +132,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
           segon[grep("^oct",segon)]<-10
           segon[grep("^nov",segon)]<-11
           segon[grep("^dec",segon)]<-12
-             # en castellà
+             # en castella
           segon[grep("^ene",segon)]<-1
           segon[grep("^feb",segon)]<-2
           segon[grep("^mar",segon)]<-3
@@ -145,7 +145,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
           segon[grep("^oct",segon)]<-10
           segon[grep("^nov",segon)]<-11
           segon[grep("^dic",segon)]<-12
-             # en català
+             # en catala
           segon[grep("^gen",segon)]<-1
           segon[grep("^feb",segon)]<-2
           segon[grep("^mar",segon)]<-3
@@ -158,7 +158,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
           segon[grep("^oct",segon)]<-10
           segon[grep("^nov",segon)]<-11
           segon[grep("^dic",segon)]<-12
-          ## mesos i potser també segons
+          ## mesos i potser tambe segons
           tercer.aux<-unlist(lapply(strsplit(aux,"/"),function(x) x[3]))
           tercer.aux<-trim(tercer.aux)  # si no donaria errors en formats tipus 1/1/ 2001
           tercer<-unlist(lapply(strsplit(tercer.aux," "),function(x) x[1]))
@@ -175,7 +175,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
           if (sum(is.na(primer))<nrow(taula) && sum(is.na(segon))<nrow(taula) && sum(is.na(tercer))<nrow(taula)){ ## no podem convertir cap valor a data: ho deixem a caràcter
 
             aux2<-paste(as.character(primer),as.character(segon),as.character(tercer),sep="/")
-            # totes les 6 possibilitats de "més a menys normals"
+            # totes les 6 possibilitats de "mes a menys normals"
             format.data<-matrix(NA,nrow(taula),6) # les sis possibilitats
 
             format.data[,1]<-ifelse(primer%in%c(1:31) & segon%in%1:12 & (tercer>31 | tercer<10),1,0)  #{dates<-dates(aux2,format=c(dates = "d/m/y"));format.data=c(format.data,"d/m/y")}
@@ -188,7 +188,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
             colnames(format.data)<-c("d/m/y","m/d/y","y/m/d","y/d/m","m/y/d","d/y/m")
             formats.data.possibles<-colnames(format.data)[apply(format.data==1,2,any)]
 
-            format.data<-names(sort(colSums(format.data),decreasing = TRUE))[1] # agafem el format més freqüent, i si hi ha empat, el primer d'ells.
+            format.data<-names(sort(colSums(format.data),decreasing = TRUE))[1]
 
             dates<-dates(aux2,format=c(dates=format.data),out.format=c(dates="day-mon-year"))
 
@@ -207,7 +207,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
               time.segon<-unlist(lapply(strsplit(quart,":"),function(x) x[2]))
               time.tercer<-unlist(lapply(strsplit(quart,":"),function(x) x[3]))
 
-              if (!any(is.na(as.double(time.primer)) || is.na(as.double(time.segon)) || is.na(as.double(time.tercer)))){ # si no passa això no podem convertir-ho a hora
+              if (!any(is.na(as.double(time.primer)) || is.na(as.double(time.segon)) || is.na(as.double(time.tercer)))){
 
                 time.primer<-as.integer(time.primer)
                 time.segon<-as.integer(time.segon)
@@ -215,7 +215,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
                 format.time<-NULL
                 aux2<-paste(as.character(time.primer),as.character(time.segon),as.character(time.tercer),sep=":")
-                # totes les 6 possibilitats de "més a menys normals"
+                # totes les 6 possibilitats de "mes a menys normals"
                 time.primer.aux<-time.primer[!is.na(time.primer)]
                 time.segon.aux<-time.segon[!is.na(time.segon)]
                 time.tercer.aux<-time.tercer[!is.na(time.tercer)]
@@ -228,7 +228,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
                 if (!is.null(format.time)){
                   if (length(format.time)>1){
-                    format.time<-format.time[1]  # n'agafem un: el primer.
+                    format.time<-format.time[1]
                     times<-times(aux2,format=c(times = format.time),out.format=c(times="h:m:s"))
                   }
                   var<-chron(dates,times)
@@ -236,7 +236,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
                   formats[j]<-"DATETIME23"
                   assignat=TRUE
                 } else{
-                  cat("ADVERTÈNCIA: La variable té segons, minuts o hores impossibles: només es posaran els dies","\n\n") # s'ha de quedar a caràcter
+                  cat("ADVERTENCIA: La variable te segons, minuts o hores impossibles: nomes es posaran els dies","\n\n")
                   var<-chron(dates)
                   taula[,j]<-var
                   formats[j]<-"DATE11"
@@ -245,18 +245,18 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
               }
             }
-          } # no podem convertir a data cap valor: ho deixem a caràcter
+          }
 
-        } else { # el format ja està assignat a chron, però hem de posar els formats estàndars (day-mon-year h:m:s)
+        } else {
 
           var<-taula[,j]
 
-          if (length(attributes(var)$format)>1){ # té dies i hores
+          if (length(attributes(var)$format)>1){ # te dies i hores
             var<-chron(var,out.format=c(dates="day-mon-year",times="h:m:s"))
             taula[,j]<-var
             formats[j]<-"DATETIME23"
             assignat=TRUE
-          } else { # només té dies
+          } else { # nomes te dies
             var<-chron(var,out.format=c(dates="day-mon-year"))
             taula[,j]<-var
             formats[j]<-"DATE11"
@@ -266,14 +266,14 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
         if (assignat) na.despres<-is.na(var)
 
-        if (assignat && sum(na.despres)>sum(na.abans)){  # per algun motiu hem perdut algun valor en el procés de conversió
-          if ((sum(na.despres)-sum(na.abans))/sum(!na.abans)>rate.miss.date){     # s'han perdut més del 50% dels valors en el procés de conversió
+        if (assignat && sum(na.despres)>sum(na.abans)){
+          if ((sum(na.despres)-sum(na.abans))/sum(!na.abans)>rate.miss.date){
             assignat=FALSE
-            var<-taula.original[,j] # torna a posar tal i com estava
-            cat("La variable no s'ha convertit a data perquè es perden més del",rate.miss.date*100,"% dels valors")
-          }else{ # si es perden menys del 50% es deixa a data però s'informa de quins s'han perdut.
+            var<-taula.original[,j]
+            cat("La variable no s ha convertit a data perque es perden mes del",rate.miss.date*100,"% dels valors")
+          }else{
 
-            ######  TAULA DE PERDUTS EN LA CONVERSIÓ A DATA #######
+            ######  TAULA DE PERDUTS EN LA CONVERSIO A DATA #######
             llista.perduts<-taula.original[na.despres!=na.abans,j]
             if (!is.null(identif)){
               num_indiv=taula[na.despres!=na.abans,identif]
@@ -283,14 +283,14 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
               num_indiv=which(na.despres!=na.abans)
               taula.perduts[[j]]<-data.frame(list(row_num=num_indiv,valors=llista.perduts))
             }
-            cat("\n\nS'han perdut",nrow(taula.perduts),"valors de la variable en la conversió a format data\n\n")
+            cat("\n\nS han perdut",nrow(taula.perduts),"valors de la variable en la conversio a format data\n\n")
             print(taula.perduts[[j]])
             cat("\n\n")
 
           }
         }
 
-        ## dates anteriors a "14/10/1582" que 'R' entén bé però que a l'exportar-ho a SPSS queden com a missing si es defineixen en format data
+        ## dates anteriors a "14/10/1582" que 'R' enten be pero que a l exportar-ho a SPSS queden com a missing si es defineixen en format data
         if (assignat){
           llista.perduts.antic<-(var<chron(dates="14/10/1582",format=c(dates="d/m/y")))
           llista.perduts.antic<-ifelse(is.na(llista.perduts.antic),FALSE,llista.perduts.antic)
@@ -304,16 +304,16 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
             num_indiv=which(llista.perduts.antic)
             taula.perduts.antic[[j]]<-data.frame(list(row_num=num_indiv,valors=as.character(taula.original[llista.perduts.antic,j])))
           }
-          cat("\n\nEn l'exportació a SPSS es perdran els valors de la variable per ser dates anteriors a 14/10/1582 per als individus:\n")
+          cat("\n\nEn l'exportacio a SPSS es perdran els valors de la variable per ser dates anteriors a 14/10/1582 per als individus:\n")
           print(taula.perduts.antic[[j]])
           cat("\n\n")
         }
       }
 
 
-      ### VARIABLES CARÀCTER (si no ho ha assignat ni a numèric ni a data, es queda a caràcter
+      ### VARIABLES CARACTER (si no ho ha assignat ni a numeric ni a data, es queda a caracter)
 
-      if (!assignat){ ## es queda a caràcter
+      if (!assignat){ ## es queda a caracter
         taula[,j]<-as.character(var)
         tempx <- taula[,j]
         tempx <- ifelse(is.na(tempx)," ",tempx)
@@ -332,7 +332,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
             num_indiv=index
             taula.string[[j]]<-data.frame(list(row_num=num_indiv,valors=var.antic))
           }
-          cat("\n\nS'han eliminat tabuladors ('\\t') salts de carro ('\\n') i/o quadrats ('\\r') per als individus:\n")
+          cat("\n\nS han eliminat tabuladors ('\\t') salts de carro ('\\n') i/o quadrats ('\\r') per als individus:\n")
           print(taula.string[[j]])
           cat("\n\n")
         }
@@ -348,9 +348,8 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
 
       cat("\n   Se li ha assignat el format 'SPSS':",formats[j],"     \n")
       if (!is.null(format.antic)) cat("   Abans tenia el format 'SPSS'",format.antic,"\n\n")
-      # si tenia value.labels i era caràcter i l'hem convertit a numèric llista els value labels que tenia.
       if (!is.null(format.antic) && (sub("[0-9.]+$","",format.antic)=="A" & sub("[0-9.]+$","",formats[j])=="F" & !is.null(attr(taula[,j],"value.labels")))){
-        cat("\nLa variable tenia les següents etiquetes de valor:\n")
+        cat("\nLa variable tenia les seguents etiquetes de valor:\n")
         print(attr(taula[,j],"value.labels"))
         attr(taula[,j],"value.labels")=structure(as.double(attr(taula[,j],"value.labels")),names=names(attr(taula[,j],"value.labels")))
         cat("\nque ara passen a ser:\n")
@@ -358,7 +357,7 @@ arregla.formats<-function(taula,identif=NULL,force=FALSE,rate.miss.date=0.5){
       }
     }  ## no fa res si els formats estan arreglats
 
-    if (!inherits(try(get("quart"),silent=TRUE), "try-error")) rm(quart) # si exiteix la variable quart l'elimina.
+    if (!inherits(try(get("quart"),silent=TRUE), "try-error")) rm(quart)
 
   } ## FI BUCLE
 
