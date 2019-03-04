@@ -1,5 +1,5 @@
 #' subset2
-#' ANÀLEG AL SUBSET PER NO PERD ELS ATRIBUTS
+#' ANALEG AL SUBSET PER NO PERD ELS ATRIBUTS
 #' @param data dades
 #' @param keep logical vector per seleccionar les files. O una expressió lógica en format caràcter
 #' @param vars vector amb els noms de les variables a seleccionar
